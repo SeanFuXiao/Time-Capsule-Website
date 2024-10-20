@@ -48,6 +48,7 @@
         </p>
         <% } %>
       </section>
+
       <% if (capsule.owner._id.toString() === user._id.toString()) { %>
       <a href="/capsules/<%= capsule._id %>/edit">
         <button>Edit Capsule</button>
@@ -58,7 +59,16 @@
         <ul>
           <% if (capsule.participants && capsule.participants.length > 0) { %>
           <% capsule.participants.forEach(participant => { %>
-          <li><%= participant.username %></li>
+          <li>
+            <% if (capsule.owner._id.toString() === user._id.toString()) { %>
+            <input
+              type="checkbox"
+              class="participantCheckbox"
+              name="selectedParticipants[]"
+              value="<%= participant._id %>"
+            />
+            <% } %> <%= participant.username %>
+          </li>
           <% }) %> <% } else { %>
           <li>No participants invited yet.</li>
           <% } %>
