@@ -48,21 +48,29 @@
       <!-- 显示参与者列表 -->
       <section>
         <h3>Participants</h3>
-        <ul>
-          <% if (capsule.participants && capsule.participants.length > 0) { %>
-          <% capsule.participants.forEach(participant => { %>
-          <li>
-            <input
-              type="checkbox"
-              class="participantCheckbox"
-              value="<%= participant._id %>"
-            />
-            <%= participant.username %>
-          </li>
-          <% }) %> <% } else { %>
-          <li>No participants invited yet.</li>
-          <% } %>
-        </ul>
+        <form
+          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
+          method="POST"
+          onsubmit="return checkDelete();"
+        >
+          <ul>
+            <% if (capsule.participants && capsule.participants.length > 0) { %>
+            <% capsule.participants.forEach(participant => { %>
+            <li>
+              <input
+                type="checkbox"
+                class="participantCheckbox"
+                name="selectedParticipants"
+                value="<%= participant._id%>"
+              />
+              <%= participant.username %>
+            </li>
+            <% }) %> <% } else { %>
+            <li>No participants invited yet.</li>
+            <% } %>
+          </ul>
+          <button type="submit">Delete Selected</button>
+        </form>
       </section>
 
       <!-- 添加参与者 -->
@@ -80,17 +88,6 @@
             <button type="submit">Add</button>
           </form>
         </div>
-      </section>
-
-      <!-- 删除选中的参与者 -->
-      <section>
-        <form
-          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
-          method="POST"
-          onsubmit="return checkDelete();"
-        >
-          <button type="submit">Delete Selected</button>
-        </form>
       </section>
     </main>
 
