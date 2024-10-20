@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Capsule</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      // 显示Add输入框
+      function showAddParticipant() {
+        const addParticipantInput = document.getElementById(
+          "addParticipantInput"
+        );
+        addParticipantInput.style.display = "block";
+      }
+
+      // 检查是否有选择的参与者进行删除
+      function checkDelete() {
+        const selected = document.querySelectorAll(
+          ".participantCheckbox:checked"
+        );
+        if (selected.length === 0) {
+          alert("Please select one or more participants to delete.");
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>View Time Capsule</h1>
+      <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2><%= capsule.title %></h2>
+        <p>
+          <strong>Unlock Date:</strong> <%= capsule.unlockDate.toDateString() %>
+        </p>
+        <p><strong>Content:</strong> <%= capsule.content %></p>
+      </section>
+
+      <!-- 显示参与者列表 -->
+      <section>
+        <h3>Participants</h3>
+        <ul>
+          <% if (capsule.participants && capsule.participants.length > 0) { %>
+          <% capsule.participants.forEach(participant => { %>
+          <li>
+            <input
+              type="checkbox"
+              class="participantCheckbox"
+              value="<%= participant._id %>"
+            />
+            <%= participant.username %>
+          </li>
+          <% }) %> <% } else { %>
+          <li>No participants invited yet.</li>
+          <% } %>
+        </ul>
+      </section>
+
+      <!-- 添加参与者 -->
+      <section>
+        <button onclick="showAddParticipant()">Add Participant</button>
+        <div id="addParticipantInput" style="display: none">
+          <form action="/capsules/<%= capsule._id %>/invite" method="POST">
+            <input
+              type="text"
+              id="participant"
+              name="participant"
+              placeholder="Enter username"
+              required
+            />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 删除选中的参与者 -->
+      <section>
+        <form
+          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
+          method="POST"
+          onsubmit="return checkDelete();"
+        >
+          <button type="submit">Delete Selected</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Digital Time Capsule</p>
+    </footer>
+  </body>
+</html>

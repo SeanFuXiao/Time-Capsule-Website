@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Dashboard</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Welcome, <%= user.username %></h2>
+
+      <a href="/capsules/create">
+        <button>Create a New Time Capsule</button>
+      </a>
+
+      <h3>Your Time Capsules</h3>
+      <ul>
+        <% if (capsules && capsules.length > 0) { %> <%
+        capsules.forEach(function(capsule) { %>
+        <li>
+          <h4><%= capsule.title %></h4>
+          <p>
+            Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
+          </p>
+          <a href="/capsules/<%= capsule._id %>">View Capsule</a>
+        </li>
+        <% }); %> <% } else { %>
+        <p>You don't have any time capsules yet.</p>
+        <% } %>
+      </ul>
+    </main>
+  </body>
+</html>
