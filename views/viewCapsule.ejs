@@ -12,6 +12,7 @@
         );
         addParticipantInput.style.display = "block";
       }
+
       function checkDelete() {
         const selected = document.querySelectorAll(
           ".participantCheckbox:checked"
@@ -39,6 +40,7 @@
         <p>
           <strong>Unlock Date:</strong> <%= capsule.unlockDate.toDateString() %>
         </p>
+
         <% if (new Date() >= capsule.unlockDate) { %>
         <p><strong>Content:</strong> <%= capsule.content %></p>
         <% } else { %>
@@ -54,25 +56,36 @@
         <button>Edit Capsule</button>
       </a>
       <% } %>
+
       <section>
         <h3>Participants</h3>
-        <ul>
-          <% if (capsule.participants && capsule.participants.length > 0) { %>
-          <% capsule.participants.forEach(participant => { %>
-          <li>
-            <% if (capsule.owner._id.toString() === user._id.toString()) { %>
-            <input
-              type="checkbox"
-              class="participantCheckbox"
-              name="selectedParticipants[]"
-              value="<%= participant._id %>"
-            />
-            <% } %> <%= participant.username %>
-          </li>
-          <% }) %> <% } else { %>
-          <li>No participants invited yet.</li>
+        <form
+          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
+          method="POST"
+          onsubmit="return checkDelete();"
+        >
+          <ul>
+            <% if (capsule.participants && capsule.participants.length > 0) { %>
+            <% capsule.participants.forEach(participant => { %>
+            <li>
+              <% if (capsule.owner._id.toString() === user._id.toString()) { %>
+              <input
+                type="checkbox"
+                class="participantCheckbox"
+                name="selectedParticipants[]"
+                value="<%= participant._id %>"
+              />
+              <% } %> <%= participant.username %>
+            </li>
+            <% }) %> <% } else { %>
+            <li>No participants invited yet.</li>
+            <% } %>
+          </ul>
+
+          <% if (capsule.owner._id.toString() === user._id.toString()) { %>
+          <button type="submit">Delete Selected</button>
           <% } %>
-        </ul>
+        </form>
       </section>
 
       <% if (capsule.owner._id.toString() === user._id.toString()) { %>
@@ -90,16 +103,6 @@
             <button type="submit">Add</button>
           </form>
         </div>
-      </section>
-
-      <section>
-        <form
-          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
-          method="POST"
-          onsubmit="return checkDelete();"
-        >
-          <button type="submit">Delete Selected</button>
-        </form>
       </section>
       <% } %>
 
