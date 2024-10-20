@@ -37,9 +37,14 @@ exports.dashboard = async (req, res) => {
   }
 
   try {
-    const capsules = await Capsule.find({ owner: userId });
+    const createdCapsules = await Capsule.find({ owner: userId });
+    const participatingCapsules = await Capsule.find({ participants: userId });
 
-    res.render("dashboard", { user: req.session.user, capsules });
+    res.render("dashboard", {
+      user: req.session.user,
+      createdCapsules,
+      participatingCapsules,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading dashboard.");

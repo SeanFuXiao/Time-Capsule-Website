@@ -6,15 +6,12 @@
     <title>View Capsule</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <script>
-      // 显示Add输入框
       function showAddParticipant() {
         const addParticipantInput = document.getElementById(
           "addParticipantInput"
         );
         addParticipantInput.style.display = "block";
       }
-
-      // 检查是否有选择的参与者进行删除
       function checkDelete() {
         const selected = document.querySelectorAll(
           ".participantCheckbox:checked"
@@ -42,38 +39,33 @@
         <p>
           <strong>Unlock Date:</strong> <%= capsule.unlockDate.toDateString() %>
         </p>
+        <% if (new Date() >= capsule.unlockDate) { %>
         <p><strong>Content:</strong> <%= capsule.content %></p>
+        <% } else { %>
+        <p>
+          The capsule is still locked. You cannot view the content until the
+          unlock date.
+        </p>
+        <% } %>
       </section>
-
-      <!-- 显示参与者列表 -->
+      <% if (capsule.owner._id.toString() === user._id.toString()) { %>
+      <a href="/capsules/<%= capsule._id %>/edit">
+        <button>Edit Capsule</button>
+      </a>
+      <% } %>
       <section>
         <h3>Participants</h3>
-        <form
-          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
-          method="POST"
-          onsubmit="return checkDelete();"
-        >
-          <ul>
-            <% if (capsule.participants && capsule.participants.length > 0) { %>
-            <% capsule.participants.forEach(participant => { %>
-            <li>
-              <input
-                type="checkbox"
-                class="participantCheckbox"
-                name="selectedParticipants"
-                value="<%= participant._id%>"
-              />
-              <%= participant.username %>
-            </li>
-            <% }) %> <% } else { %>
-            <li>No participants invited yet.</li>
-            <% } %>
-          </ul>
-          <button type="submit">Delete Selected</button>
-        </form>
+        <ul>
+          <% if (capsule.participants && capsule.participants.length > 0) { %>
+          <% capsule.participants.forEach(participant => { %>
+          <li><%= participant.username %></li>
+          <% }) %> <% } else { %>
+          <li>No participants invited yet.</li>
+          <% } %>
+        </ul>
       </section>
 
-      <!-- 添加参与者 -->
+      <% if (capsule.owner._id.toString() === user._id.toString()) { %>
       <section>
         <button onclick="showAddParticipant()">Add Participant</button>
         <div id="addParticipantInput" style="display: none">
@@ -88,6 +80,49 @@
             <button type="submit">Add</button>
           </form>
         </div>
+      </section>
+
+      <section>
+        <form
+          action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
+          method="POST"
+          onsubmit="return checkDelete();"
+        >
+          <button type="submit">Delete Selected</button>
+        </form>
+      </section>
+      <% } %>
+
+      <section>
+        <h3>Comments</h3>
+        <ul>
+          <% if (comments && comments.length > 0) { %> <%
+          comments.forEach(comment => { %>
+          <li>
+            <strong><%= comment.user.username %>:</strong> <%= comment.content
+            %>
+            <em>(<%= comment.createdAt.toDateString() %>)</em>
+          </li>
+          <% }) %> <% } else { %>
+          <li>No comments yet.</li>
+          <% } %>
+        </ul>
+
+        <% if (new Date() >= capsule.unlockDate) { %>
+        <form action="/capsules/<%= capsule._id %>/comments" method="POST">
+          <textarea
+            name="content"
+            placeholder="Add your comment..."
+            required
+          ></textarea>
+          <button type="submit">Add Comment</button>
+        </form>
+        <% } else { %>
+        <p>
+          The capsule is still locked. You cannot add comments until it is
+          unlocked.
+        </p>
+        <% } %>
       </section>
     </main>
 

@@ -1,6 +1,6 @@
 const Capsule = require("../models/capsule");
 const User = require("../models/user");
-
+const Comment = require("../models/comment");
 exports.createCapsule = async (req, res) => {
   const { title, content, unlockDate } = req.body;
   const userId = req.session.userId;
@@ -23,22 +23,66 @@ exports.viewCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id)
     .populate("participants", "username")
     .populate("owner", "username");
-  res.render("viewCapsule", { capsule });
+
+  const comments = await Comment.find({ capsule: capsule._id }).populate(
+    "user",
+    "username"
+  );
+
+  res.render("viewCapsule", { capsule, comments, user: req.session.user });
 };
 
+exports.addComment = async (req, res) => {
+  const { content } = req.body;
+  const userId = req.session.userId;
+  const capsuleId = req.params.id;
+
+  const capsule = await Capsule.findById(capsuleId);
+
+  if (new Date() < capsule.unlockDate) {
+    return res
+      .status(403)
+      .send("You cannot comment on this capsule until it is unlocked.");
+  }
+
+  const comment = new Comment({
+    content,
+    capsule: capsuleId,
+    user: userId,
+  });
+
+  await comment.save();
+  res.redirect(`/capsules/${capsuleId}`);
+};
 exports.getEditCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id);
+
   if (!capsule) {
     return res.status(404).send("Capsule not found.");
   }
+
+  if (capsule.owner.toString() !== req.session.userId) {
+    return res
+      .status(403)
+      .send("You do not have permission to edit this capsule.");
+  }
+
   res.render("editCapsule", { capsule });
 };
 
 exports.editCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id);
+
+  if (capsule.owner.toString() !== req.session.userId) {
+    return res
+      .status(403)
+      .send("You do not have permission to edit this capsule.");
+  }
+
   capsule.title = req.body.title;
   capsule.content = req.body.content;
   capsule.unlockDate = req.body.unlockDate;
+
   await capsule.save();
   res.redirect("/dashboard");
 };

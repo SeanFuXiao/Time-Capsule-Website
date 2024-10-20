@@ -17,15 +17,13 @@
 
     <main>
       <h2>Welcome, <%= user.username %></h2>
-
       <a href="/capsules/create">
         <button>Create a New Time Capsule</button>
       </a>
-
-      <h3>Your Time Capsules</h3>
+      <h3>Your Created Time Capsules</h3>
       <ul>
-        <% if (capsules && capsules.length > 0) { %> <%
-        capsules.forEach(function(capsule) { %>
+        <% if (createdCapsules && createdCapsules.length > 0) { %> <%
+        createdCapsules.forEach(function(capsule) { %>
         <li>
           <h4><%= capsule.title %></h4>
           <p>
@@ -34,7 +32,23 @@
           <a href="/capsules/<%= capsule._id %>">View Capsule</a>
         </li>
         <% }); %> <% } else { %>
-        <p>You don't have any time capsules yet.</p>
+        <p>You haven't created any time capsules yet.</p>
+        <% } %>
+      </ul>
+
+      <h3>Time Capsules You're Participating In</h3>
+      <ul>
+        <% if (participatingCapsules && participatingCapsules.length > 0) { %>
+        <% participatingCapsules.forEach(function(capsule) { %>
+        <li>
+          <h4><%= capsule.title %></h4>
+          <p>
+            Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
+          </p>
+          <a href="/capsules/<%= capsule._id %>">View Capsule</a>
+        </li>
+        <% }); %> <% } else { %>
+        <p>You haven't been invited to any time capsules yet.</p>
         <% } %>
       </ul>
     </main>
