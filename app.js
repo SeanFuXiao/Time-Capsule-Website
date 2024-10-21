@@ -23,7 +23,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("homepage");
+  res.render("login");
 });
 
 const authRoutes = require("./routes/authRoutes");
@@ -35,4 +35,9 @@ app.use("/", capsuleRoutes);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}`);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
