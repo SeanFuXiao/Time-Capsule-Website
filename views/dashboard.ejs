@@ -5,52 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script>
+      function calculateProgress(startDate, unlockDate) {
+        const now = new Date();
+        const start = new Date(startDate);
+        const unlock = new Date(unlockDate);
+
+        // Calculate progress percentage
+        const totalDuration = unlock - start;
+        const timePassed = now - start;
+
+        if (timePassed >= totalDuration) {
+          return 100; // Fully unlocked
+        }
+        return Math.min((timePassed / totalDuration) * 100, 100);
+      }
+
+      function updateProgressBars() {
+        const progressBars = document.querySelectorAll(".progress-bar");
+        progressBars.forEach((bar) => {
+          const startDate = bar.dataset.startDate;
+          const unlockDate = bar.dataset.unlockDate;
+          const progress = calculateProgress(startDate, unlockDate);
+          bar.style.width = progress + "%";
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", updateProgressBars);
+    </script>
   </head>
-  <body>
-    <header>
-      <h1>Dashboard</h1>
+  <body class="dashboard-page">
+    <header class="header">
+      <h1>Welcome, <%= user.username %></h1>
       <nav>
         <a href="/">Home</a>
         <a href="/logout">Logout</a>
       </nav>
     </header>
 
-    <main>
-      <h2>Welcome, <%= user.username %></h2>
-      <a href="/capsules/create">
-        <button>Create a New Time Capsule</button>
-      </a>
-      <h3>Your Created Time Capsules</h3>
-      <ul>
-        <% if (createdCapsules && createdCapsules.length > 0) { %> <%
-        createdCapsules.forEach(function(capsule) { %>
-        <li>
-          <h4><%= capsule.title %></h4>
-          <p>
-            Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
-          </p>
-          <a href="/capsules/<%= capsule._id %>">View Capsule</a>
-        </li>
-        <% }); %> <% } else { %>
-        <p>You haven't created any time capsules yet.</p>
-        <% } %>
-      </ul>
+    <main class="dashboard-container">
+      <section class="capsule-section created-capsules">
+        <h3>Your Created Time Capsules</h3>
+        <ul class="capsule-list">
+          <% if (createdCapsules && createdCapsules.length > 0) { %> <%
+          createdCapsules.forEach(function(capsule, index) { %>
+          <li
+            class="capsule-item <% if (index % 5 === 0) { %> capsule-orange <% } else if (index % 5 === 1) { %> capsule-blue <% } else if (index % 5 === 2) { %> capsule-green <% } else if (index % 5 === 3) { %> capsule-purple <% } else { %> capsule-pink <% } %>"
+          >
+            <h4><%= capsule.title %></h4>
+            <p>
+              Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
+            </p>
 
-      <h3>Time Capsules You're Participating In</h3>
-      <ul>
-        <% if (participatingCapsules && participatingCapsules.length > 0) { %>
-        <% participatingCapsules.forEach(function(capsule) { %>
-        <li>
-          <h4><%= capsule.title %></h4>
-          <p>
-            Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
-          </p>
-          <a href="/capsules/<%= capsule._id %>">View Capsule</a>
-        </li>
-        <% }); %> <% } else { %>
-        <p>You haven't been invited to any time capsules yet.</p>
-        <% } %>
-      </ul>
+            <div class="progress-container">
+              <div
+                class="progress-bar"
+                data-start-date="<%= capsule.createdAt.toISOString() %>"
+                data-unlock-date="<%= capsule.unlockDate.toISOString() %>"
+              ></div>
+            </div>
+            <a href="/capsules/<%= capsule._id %>" class="button-primary"
+              >View Capsule</a
+            >
+          </li>
+          <% }); %> <% } else { %>
+          <li class="empty-message">
+            You haven't created any time capsules yet.
+          </li>
+          <% } %>
+        </ul>
+        <div class="create-button">
+          <a href="/capsules/create" class="button-primary"
+            >Create a New Time Capsule</a
+          >
+        </div>
+      </section>
+
+      <section class="capsule-section participating-capsules">
+        <h3>Time Capsules You're Participating In</h3>
+        <ul class="capsule-list">
+          <% if (participatingCapsules && participatingCapsules.length > 0) { %>
+          <% participatingCapsules.forEach(function(capsule, index) { %>
+          <li
+            class="capsule-item <% if (index % 5 === 0) { %> capsule-orange <% } else if (index % 5 === 1) { %> capsule-blue <% } else if (index % 5 === 2) { %> capsule-green <% } else if (index % 5 === 3) { %> capsule-purple <% } else { %> capsule-pink <% } %>"
+          >
+            <h4><%= capsule.title %></h4>
+            <p>
+              Unlock Date: <%= capsule.unlockDate.toISOString().split('T')[0] %>
+            </p>
+
+            <div class="progress-container">
+              <div
+                class="progress-bar"
+                data-start-date="<%= capsule.createdAt.toISOString() %>"
+                data-unlock-date="<%= capsule.unlockDate.toISOString() %>"
+              ></div>
+            </div>
+            <a href="/capsules/<%= capsule._id %>" class="button-primary"
+              >View Capsule</a
+            >
+          </li>
+          <% }); %> <% } else { %>
+          <li class="empty-message">
+            You haven't been invited to any time capsules yet.
+          </li>
+          <% } %>
+        </ul>
+      </section>
     </main>
+
+    <div id="personal-links">
+      <a href="https://github.com/SeanFuXiao" id="github">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/xiao-fu-138b96316/" id="linkedin">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a
+        href="https://www.facebook.com/profile.php?id=100090159947400"
+        id="facebook"
+      >
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="mailto:seanfuxiao@gmail.com" id="email">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+    <footer>
+      <p>&copy; 2024 Digital Time Capsule</p>
+    </footer>
   </body>
 </html>
