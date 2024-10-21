@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const Capsule = require("../models/capsule");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res) => {
   const { username, password } = req.body;
