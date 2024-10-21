@@ -3,29 +3,48 @@ const Capsule = require("../models/capsule");
 const bcrypt = require("bcryptjs");
 
 exports.register = async (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  const existingUser = await User.findOne({ username });
-  if (existingUser) {
-    return res.send("Username already exists. Please choose another one.");
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.render("register", {
+        errorMessage: "Username already taken.",
+      });
+    }
+
+    const user = new User({ username, password });
+    await user.save();
+
+    res.redirect("/login");
+  } catch (error) {
+    console.error(error);
+    res.render("register", {
+      errorMessage: "An error during registration.",
+    });
   }
-
-  const user = new User({ username, password });
-  await user.save();
-
-  res.redirect("/login");
 };
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username });
-  if (user && (await bcrypt.compare(password, user.password))) {
-    req.session.userId = user._id;
-    req.session.user = user;
-    res.redirect("/dashboard");
-  } else {
-    res.send("Wrong Username or Password");
+  try {
+    const user = await User.findOne({ username });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      req.session.userId = user._id;
+      req.session.user = user;
+      return res.redirect("/dashboard");
+    }
+
+    return res.render("login", {
+      errorMessage: "Incorrect Username or Password",
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    return res.render("login", {
+      errorMessage: "An error during login.",
+    });
   }
 };
 
