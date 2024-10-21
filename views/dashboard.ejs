@@ -40,7 +40,7 @@
   </head>
   <body class="dashboard-page">
     <header class="header">
-      <h1>Welcome, <%= user.username %></h1>
+      <h1>Welcome <%= user.username %></h1>
       <nav>
         <a href="/">Home</a>
         <a href="/logout">Logout</a>
@@ -49,7 +49,7 @@
 
     <main class="dashboard-container">
       <section class="capsule-section created-capsules">
-        <h3>Your Created Time Capsules</h3>
+        <h3>Your Capsules</h3>
         <ul class="capsule-list">
           <% if (createdCapsules && createdCapsules.length > 0) { %> <%
           createdCapsules.forEach(function(capsule, index) { %>
@@ -86,7 +86,7 @@
       </section>
 
       <section class="capsule-section participating-capsules">
-        <h3>Time Capsules You're Participating In</h3>
+        <h3>Joined Capsules</h3>
         <ul class="capsule-list">
           <% if (participatingCapsules && participatingCapsules.length > 0) { %>
           <% participatingCapsules.forEach(function(capsule, index) { %>
