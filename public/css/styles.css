@@ -853,7 +853,7 @@ textarea:focus {
   color: #0071e3;
 }
 #personal-links a i {
-  font-size: 38px;
+  font-size: 30px;
 }
 #github:hover {
   color: #181717;
@@ -873,5 +873,13 @@ textarea:focus {
     right: 10px;
     top: 15%;
     gap: 15px;
+  }
+}
+@media (max-width: 768px) {
+  #personal-links {
+    position: fixed;
+    right: 5px;
+    top: 240px;
+    bottom: 100px;
   }
 }
