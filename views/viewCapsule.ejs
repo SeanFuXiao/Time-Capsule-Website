@@ -21,12 +21,16 @@
 
     <main class="capsule-container">
       <div class="main-content">
+        <!-- display capsule -->
+        <!-- display capsule -->
         <section class="content-box">
           <h2><%= capsule.title %></h2>
           <p>
             <strong>Unlock Date:</strong> <%= capsule.unlockDate.toDateString()
             %>
           </p>
+          <!-- showing if unlocked -->
+          <!-- showing if unlocked -->
           <strong>Content:</strong>
           <div class="capsule-content">
             <% if (new Date() >= capsule.unlockDate) { %>
@@ -38,7 +42,8 @@
             </p>
             <% } %>
           </div>
-
+          <!-- managing members -->
+          <!-- managing members -->
           <h3>Members</h3>
           <form
             action="/capsules/<%= capsule._id %>/deleteSelectedParticipants"
@@ -70,7 +75,8 @@
                   <% } %>
                 </ul>
               </div>
-
+              <!-- Edit only owner -->
+              <!-- Edit only owner -->
               <% if (capsule.owner._id.toString() === user._id.toString()) { %>
               <div class="buttons-box">
                 <button type="submit" class="button-secondary delete-button">
@@ -96,7 +102,8 @@
           </section>
           <% } %>
         </section>
-
+        <!-- display comments if unlocked -->
+        <!-- display comments if unlocked -->
         <section class="comments-box">
           <h3>Messages</h3>
           <ul class="comment-list">
@@ -135,29 +142,35 @@
       </div>
     </main>
 
-    <div id="personal-links">
-      <a href="https://github.com/SeanFuXiao" id="github">
-        <i class="fab fa-github"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/xiao-fu-138b96316/" id="linkedin">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a
-        href="https://www.facebook.com/profile.php?id=100090159947400"
-        id="facebook"
-      >
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="mailto:seanfuxiao@gmail.com" id="email">
-        <i class="fas fa-envelope"></i>
-      </a>
-    </div>
-
     <footer>
-      <p>&copy; 2024 Digital Time Capsule</p>
+      <div class="footer-content">
+        <p>&copy; 2024 Digital Time Capsule</p>
+        <div id="personal-links">
+          <a href="https://github.com/SeanFuXiao" id="github">
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/xiao-fu-138b96316/"
+            id="linkedin"
+          >
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=100090159947400"
+            id="facebook"
+          >
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="mailto:seanfuxiao@gmail.com" id="email">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
     </footer>
 
     <script>
+      // add member
+      // add member
       function addParticipant() {
         const username = prompt("Enter the username to invite:");
         if (username) {
@@ -175,7 +188,8 @@
           form.submit();
         }
       }
-
+      // check selected for deletion
+      // check selected for deletion
       function checkDelete() {
         const selected = document.querySelectorAll(
           ".participantCheckbox:checked"

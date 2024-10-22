@@ -184,6 +184,10 @@ nav a:hover {
 }
 
 footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   position: static;
   margin-top: 100px;
@@ -832,54 +836,53 @@ textarea:focus {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-#personal-links {
-  position: fixed;
-  right: 20px;
-  top: 40%;
+footer {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column; 
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
-  z-index: 100;
+  flex-direction: column; 
+}
+
+#personal-links {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 #personal-links a {
   text-decoration: none;
   color: #ede5e59a;
-  font-size: 25px;
   transition: color 0.5s ease;
 }
 
-#personal-links a:hover {
-  color: #0071e3;
-}
 #personal-links a i {
   font-size: 30px;
 }
+
 #github:hover {
   color: #181717;
 }
+
 #linkedin:hover {
   color: #0a66c2;
 }
+
 #facebook:hover {
   color: #1877f2;
 }
+
 #email:hover {
   color: #ea4335;
-}
-
-@media (max-width: 768px) {
-  #personal-links {
-    right: 10px;
-    top: 15%;
-    gap: 15px;
-  }
-}
-@media (max-width: 768px) {
-  #personal-links {
-    position: fixed;
-    right: 5px;
-    top: 240px;
-    bottom: 100px;
-  }
 }

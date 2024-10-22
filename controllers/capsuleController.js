@@ -1,6 +1,9 @@
 const Capsule = require("../models/capsule");
 const User = require("../models/user");
 const Comment = require("../models/comment");
+
+// Create capsule
+// Create capsule
 exports.createCapsule = async (req, res) => {
   const { title, content, unlockDate } = req.body;
   const userId = req.session.userId;
@@ -18,7 +21,8 @@ exports.createCapsule = async (req, res) => {
   await capsule.save();
   res.redirect("/dashboard");
 };
-
+// View capsule
+// View capsule
 exports.viewCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id)
     .populate("participants", "username")
@@ -32,6 +36,8 @@ exports.viewCapsule = async (req, res) => {
   res.render("viewCapsule", { capsule, comments, user: req.session.user });
 };
 
+// Add comment
+// Add comment
 exports.addComment = async (req, res) => {
   const { content } = req.body;
   const userId = req.session.userId;
@@ -54,6 +60,8 @@ exports.addComment = async (req, res) => {
   await comment.save();
   res.redirect(`/capsules/${capsuleId}`);
 };
+// Get editing
+// Get editing
 exports.getEditCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id);
 
@@ -69,7 +77,8 @@ exports.getEditCapsule = async (req, res) => {
 
   res.render("editCapsule", { capsule });
 };
-
+// Edit capsule
+// Edit capsule
 exports.editCapsule = async (req, res) => {
   const capsule = await Capsule.findById(req.params.id);
 
@@ -86,12 +95,14 @@ exports.editCapsule = async (req, res) => {
   await capsule.save();
   res.redirect("/dashboard");
 };
-
+// Delete capsule
+// Delete capsule
 exports.deleteCapsule = async (req, res) => {
   await Capsule.findByIdAndDelete(req.params.id);
   res.redirect("/dashboard");
 };
-
+// Invite ppl
+// Invite ppl
 exports.inviteSingleParticipant = async (req, res) => {
   const { participant } = req.body;
   const capsuleId = req.params.id;
@@ -110,7 +121,8 @@ exports.inviteSingleParticipant = async (req, res) => {
 
   res.redirect(`/capsules/${capsuleId}`);
 };
-
+// Delete ppl
+// Delete ppl
 exports.deleteSelectedParticipants = async (req, res) => {
   const capsuleId = req.params.id;
   const { selectedParticipants } = req.body;

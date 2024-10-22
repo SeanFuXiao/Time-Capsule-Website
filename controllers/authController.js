@@ -2,6 +2,8 @@ const User = require("../models/user");
 const Capsule = require("../models/capsule");
 const bcrypt = require("bcryptjs");
 
+//registration
+//registration
 exports.register = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -24,7 +26,8 @@ exports.register = async (req, res) => {
     });
   }
 };
-
+//login
+//login
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -47,7 +50,8 @@ exports.login = async (req, res) => {
     });
   }
 };
-
+//dashboard
+//dashboard
 exports.dashboard = async (req, res) => {
   const userId = req.session.userId;
 

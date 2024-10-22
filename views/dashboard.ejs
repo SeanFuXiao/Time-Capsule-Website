@@ -10,21 +10,23 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <script>
+      //calculate progress
+      //calculate progress
       function calculateProgress(startDate, unlockDate) {
         const now = new Date();
         const start = new Date(startDate);
         const unlock = new Date(unlockDate);
 
-        // Calculate progress percentage
         const totalDuration = unlock - start;
         const timePassed = now - start;
 
         if (timePassed >= totalDuration) {
-          return 100; // Fully unlocked
+          return 100;
         }
         return Math.min((timePassed / totalDuration) * 100, 100);
       }
-
+      //update progress bars
+      //update progress bars
       function updateProgressBars() {
         const progressBars = document.querySelectorAll(".progress-bar");
         progressBars.forEach((bar) => {
@@ -34,7 +36,8 @@
           bar.style.width = progress + "%";
         });
       }
-
+      // Trigger progress bar
+      // Trigger progress bar
       document.addEventListener("DOMContentLoaded", updateProgressBars);
     </script>
   </head>
@@ -46,7 +49,8 @@
         <a href="/logout">Logout</a>
       </nav>
     </header>
-
+    <!-- Section for user -->
+    <!-- Section for user -->
     <main class="dashboard-container">
       <section class="capsule-section created-capsules">
         <h3>Your Capsules</h3>
@@ -84,7 +88,8 @@
           >
         </div>
       </section>
-
+      <!-- Section for joined -->
+      <!-- Section forjoined -->
       <section class="capsule-section participating-capsules">
         <h3>Joined Capsules</h3>
         <ul class="capsule-list">
@@ -118,25 +123,30 @@
       </section>
     </main>
 
-    <div id="personal-links">
-      <a href="https://github.com/SeanFuXiao" id="github">
-        <i class="fab fa-github"></i>
-      </a>
-      <a href="https://www.linkedin.com/in/xiao-fu-138b96316/" id="linkedin">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a
-        href="https://www.facebook.com/profile.php?id=100090159947400"
-        id="facebook"
-      >
-        <i class="fab fa-facebook"></i>
-      </a>
-      <a href="mailto:seanfuxiao@gmail.com" id="email">
-        <i class="fas fa-envelope"></i>
-      </a>
-    </div>
     <footer>
-      <p>&copy; 2024 Digital Time Capsule</p>
+      <div class="footer-content">
+        <p>&copy; 2024 Digital Time Capsule</p>
+        <div id="personal-links">
+          <a href="https://github.com/SeanFuXiao" id="github">
+            <i class="fab fa-github"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/xiao-fu-138b96316/"
+            id="linkedin"
+          >
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=100090159947400"
+            id="facebook"
+          >
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="mailto:seanfuxiao@gmail.com" id="email">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
